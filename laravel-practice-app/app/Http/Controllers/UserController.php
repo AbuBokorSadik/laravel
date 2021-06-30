@@ -19,20 +19,32 @@ class UserController extends Controller
     public function getData(Request $req)
     {
 
-        // $req->validate([
-        //     'username'=>'required | max: 15',
-        //     'userpassword'=>'required | min: 7'
-        // ]);
+        $req->validate([
+            'username' => 'required | max: 15',
+            'userpassword' => 'required | min: 7'
+        ]);
 
         // echo $req;
-        // return $req->input();
+        return $req->input();
 
         // return Users::all();
 
         // $collection = Http::get("https://reqres.in/api/users?page=1");
         // return view('users',['collection'=>$collection['data']]);
 
-        
+        // return view('users');
 
+
+
+    }
+
+    public function getRequest(Request $req)
+    {
+        $req->validate([
+            'username' => 'required | max: 15',
+            'userpassword' => 'required | min: 7'
+        ]);
+        
+        return $req->input();
     }
 }

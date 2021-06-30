@@ -10,8 +10,7 @@
 
 <body>
     <h1>User Login</h1>
-    <form action="users" method="post">
-        @method('put')
+    <form action="user" method="post">
         @csrf
         <input type="text" name="username" placeholder="Enter user id"> <br>
         <span style="color: red;">@error('username'){{$message}}@enderror</span> <br>
