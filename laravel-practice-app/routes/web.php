@@ -127,5 +127,8 @@ use Illuminate\Support\Facades\Redis;
 
 // ..........pagination...........
 
-Route::view('pagination','pagination');
-Route::get('list',[PaginationController::class, 'getData']);
+// Route::view('pagination','pagination');
+// Route::get('list',[PaginationController::class, 'getData']);
+
+// ..........cruding...........
+

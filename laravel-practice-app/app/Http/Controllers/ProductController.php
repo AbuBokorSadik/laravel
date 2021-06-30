@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \App\Models\Products;
+use \App\Models\Product;
 
 class ProductController extends Controller
 {
     public function getData()
     {
-        return Products::all();
+        return Product::all();
     }
 }
