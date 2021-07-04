@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.app')
 
 @section('content')
 <h1>Create a product</h1>
@@ -6,30 +6,30 @@
     @csrf
     <div class="form-row">
         <label>Title</label>
-        <input class="form-control" type="text" name="title" require>
+        <input class="form-control" type="text" name="title" value="{{old('title')}}" required>
     </div>
     <div class="form-row">
         <label>Description</label>
-        <input class="form-control" type="text" name="description" require>
+        <input class="form-control" type="text" name="description" value="{{old('description')}}" required>
     </div>
     <div class="form-row">
         <label>Price</label>
-        <input class="form-control" type="text" name="price" require>
+        <input class="form-control" type="text" name="price" value="{{old('price')}}" required>
     </div>
     <div class="form-row">
         <label>Stock</label>
-        <input class="form-control" type="text" name="stock" require>
+        <input class="form-control" type="text" name="stock" value="{{old('stock')}}" required>
     </div>
     <div class="form-row">
         <label>Status</label>
-        <select class="custom-select" name="status" require="">
+        <select class="custom-select" name="status" required=>
             <option value="" selected>Select...</option>
-            <option value="available">Available</option>
-            <option value="unavailable">Unavailable</option>
+            <option value="available" {{old('status') == 'available' ? 'selected':''}}>Available</option>
+            <option value="unavailable" {{old('status') == 'unavailable' ? 'selected':''}}>Unavailable</option>
         </select>
     </div>
     <div class="form-row">
-        <button class="btn btn-primary btn-lg" type="submit">Create Product</button>
+        <button class="btn btn-primary btn-lg mt-3" type="submit">Create Product</button>
     </div>
 </form>
 @endsection

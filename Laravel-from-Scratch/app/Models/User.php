@@ -22,6 +22,17 @@ class User extends Authenticatable
         'password',
     ];
 
+        /**
+     * The attributes that should be mutated to dates.
+     *
+     * @deprecated Use the "casts" property
+     *
+     * @var array
+     */
+    protected $dates = [
+        'admin_since',
+    ];
+
     /**
      * The attributes that should be hidden for arrays.
      *
