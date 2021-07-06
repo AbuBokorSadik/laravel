@@ -37,5 +37,10 @@ class Product extends Model
     {
         return $this->where('status', 'available');
     }
+
+    public function getTotalAttribute()
+    {
+       return $this->price * $this->pivot->quantity;
+    }
      
 }
