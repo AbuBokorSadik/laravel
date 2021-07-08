@@ -24,7 +24,6 @@
         <h5 class="card-title">{{ $product->title }}</h5>
         <p class="card-text">{{ $product->description }}</p>
 
-
         @if(isset($cart))
 
         <p class="card-text"><strong>{{ $product->pivot->quantity }}</strong> in your cart</p>
@@ -40,6 +39,7 @@
 
 
         @else
+        <p class="card-text"><strong>{{ $product->stock }}</strong> left</p>
         <form class="d-inline" method="POST" action="{{ route('products.carts.store', ['product' => $product->id]) }}">
 
             @csrf

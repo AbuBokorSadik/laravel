@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,12 +28,22 @@ use Illuminate\Support\Facades\Route;
 
 // Route::delete('products/{product}', 'ProductController@destroy')->name('products.destroy');
 
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::get('/', 'MainController@index')->name('main');
-Route::resource('orders', 'OrderController')->only(['create', 'store']);
-Route::resource('orders.payments', 'OrderPaymentController')->only(['create', 'store']);
+
+Route::resource('orders', 'OrderController')
+    ->only(['create', 'store'])
+    ->middleware(['verified']);
+
+Route::resource('orders.payments', 'OrderPaymentController')
+    ->only(['create', 'store'])
+    ->middleware(['verified']);
+
 Route::resource('carts', 'CartController')->only(['index']);
+
 Route::resource('products.carts', 'ProductCartController')->only(['store', 'destroy']);
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes([
+    'verify' => true,
+]);

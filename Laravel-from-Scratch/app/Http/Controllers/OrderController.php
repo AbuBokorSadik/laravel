@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Services\CartService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -19,40 +21,46 @@ class OrderController extends Controller
 
     public function create()
     {
-       $cart = $this->cartService->getFromCookie();
-       
-       if(!isset($cart) || $cart->products->isEmpty()){
-           return redirect()->back()->withErrors('Your Cart is empty');
-       }
+        $cart = $this->cartService->getFromCookie();
 
-       return view('orders.create')->with([
-           'cart' => $cart
-       ]);
-       
+        if (!isset($cart) || $cart->products->isEmpty()) {
+            return redirect()->back()->withErrors('Your Cart is empty');
+        }
+
+        return view('orders.create')->with([
+            'cart' => $cart
+        ]);
     }
 
     public function store(Request $request)
     {
-        $user =$request->user();
+        return DB::transaction(function () use ($request) {
+            $user = $request->user();
 
-        $order = $user->orders()->create([
-            'status' => 'pending',
-        ]);
+            $order = $user->orders()->create([
+                'status' => 'pending',
+            ]);
 
-        $cart = $this->cartService->getFromCookie();
+            $cart = $this->cartService->getFromCookie();
 
-        $cartProductsWithQuantity = $cart->products->mapWithKeys(function($product){
-            $element[$product->id] = ['quantity' => $product->pivot->quantity];
-            return $element;
+            $cartProductsWithQuantity = $cart->products->mapWithKeys(function ($product) {
+
+                $quantity = $product->pivot->quantity;
+
+                if ($product->stock < $quantity) {
+                    throw ValidationException::withMessages([
+                        'cart' => "There is not enough stock for the quantity you required of {$product->title}",
+                    ]);
+                }
+
+                $product->decrement('stock', $quantity);
+                $element[$product->id] = ['quantity' => $quantity];
+                return $element;
+            });
+
+            $order->products()->attach($cartProductsWithQuantity->toArray());
+            return redirect()->route('orders.payments.create', ['order' => $order->id]);
         });
 
-        // dd($cartProductsWithQuantity);
-        // dd($cartProductsWithQuantity->toArray());
-
-        $order->products()->attach($cartProductsWithQuantity->toArray());
-
-        return redirect()->route('orders.payments.create', ['order' => $order->id]);
-        
     }
-
 }

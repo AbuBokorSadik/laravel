@@ -10,7 +10,7 @@ use App\Models\Order;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
