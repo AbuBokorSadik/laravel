@@ -16,7 +16,7 @@
 
 <div class="row">
     @foreach($cart->products as $product)
-    <div class="col-3">
+    <div class="col-md-3 mt-2">
         @include('components.product-cart')
     </div>
     @endforeach

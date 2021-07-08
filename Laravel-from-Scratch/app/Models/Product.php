@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\AvailableScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Image;
@@ -10,6 +11,12 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $table = 'products';
+
+    protected $with = [
+        'images',
+    ];
+
     protected $fillable = [
         'title',
         'description',
@@ -17,6 +24,11 @@ class Product extends Model
         'stock',
         'status',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new AvailableScope);
+    }
 
     public function carts()
     {
@@ -33,9 +45,9 @@ class Product extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function scopeAvailable()
+    public function scopeAvailable($query)
     {
-        return $this->where('status', 'available');
+        return $query->where('status', 'available');
     }
 
     public function getTotalAttribute()
