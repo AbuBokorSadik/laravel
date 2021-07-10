@@ -25,7 +25,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
     ];
 
-        /**
+    /**
      * The attributes that should be mutated to dates.
      *
      * @deprecated Use the "casts" property
@@ -73,6 +73,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin()
     {
         return $this->admin_since != null && $this->admin_since->lessThanOrEqualTo(now());
-     }
+    }
 
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+    
+    public function getProfileImageAttribute()
+    {
+        return $this->image ? "images/{$this->image->path}" : 'https://www.gravatar.com/avatar/404?d=mp';
+    }
 }
