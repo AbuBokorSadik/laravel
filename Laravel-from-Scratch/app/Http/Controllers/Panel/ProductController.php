@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Requests\ProductRequest;
 use App\Models\PanelProduct;
-use App\Scopes\AvailableScope;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -25,7 +21,7 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('products.create ');
+        return view('products.create');
     }
 
     public function store(ProductRequest $request)
