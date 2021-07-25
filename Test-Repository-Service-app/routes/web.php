@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('index', 'CustomerController@index');
 Route::get('/customer/{customerId}', 'CustomerController@show');
-// Route::get('/', [UserController::class, 'index']);
-
+Route::get('/customer/{customerId}/update', 'CustomerController@update');
+Route::get('/customer/{customerId}/delete', 'CustomerController@destroy');

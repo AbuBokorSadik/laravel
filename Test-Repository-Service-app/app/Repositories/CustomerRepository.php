@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Customer;
 
-class CustomerRepository
+class CustomerRepository implements CustomerRepositoryInterface
 {
     public function all()
     {
@@ -22,6 +22,18 @@ class CustomerRepository
         ->with('user')
         ->firstOrFail()
         ->format();
+    }
+
+    public function update($customerId)
+    {
+        $customer = Customer::where('id', $customerId)->firstOrFail();
+
+        $customer->update(request()->only('name'));
+    }
+
+    public function delete($customerId)
+    {
+        $customer = Customer::where('id', $customerId)->delete();
     }
 
     
