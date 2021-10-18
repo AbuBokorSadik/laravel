@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API\V1\Book;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Book\BookCreateRequest;
+use App\Http\Requests\Book\BookUpdateRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,19 +30,12 @@ class BookController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(BookCreateRequest $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // exit();
         try {
-            $validation = Validator::make($request->all(), [
-                'name' => 'required|unique:books',
-                'writer' => 'required',
-                'publication' => 'required',
-            ]);
-
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
-
             $book = Book::create([
                 'name' => $request->name,
                 'writer' => $request->writer,
@@ -48,10 +43,6 @@ class BookController extends Controller
             ]);
 
             return $this->respondInJSON(200, ['success'], $book);
-        } catch (ValidationException $e) {
-            Log::error($e->getFile() . ' ' . $e->getLine() . ' ' . $e->getMessage());
-
-            return $this->failedResponse(422, [], $e, true);
         } catch (\Exception $e) {
             Log::error($e->getFile() . ' ' . $e->getLine() . ' ' . $e->getMessage());
 
@@ -59,24 +50,24 @@ class BookController extends Controller
         }
     }
 
-    public function update($id, Request $request)
+    public function update($id, BookUpdateRequest $request)
     {
         try {
             $book = Book::find($id);
 
-            if(!$book){
+            if (!$book) {
                 return $this->failedResponse(404, ['Book not found'], null);
             }
 
-            $validation = Validator::make($request->all(), [
-                'name' => ['required', Rule::unique('books', 'name')->ignore($book->id)],
-                'writer' => 'required',
-                'publication' => 'required',
-            ]);
+            // $validation = Validator::make($request->all(), [
+            //     'name' => ['required', Rule::unique('books', 'name')->ignore($book->id)],
+            //     'writer' => 'required',
+            //     'publication' => 'required',
+            // ]);
 
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
+            // if ($validation->fails()) {
+            //     throw new ValidationException($validation);
+            // }
 
             $book->name = $request->name;
             $book->writer = $request->writer;
@@ -100,10 +91,10 @@ class BookController extends Controller
         try {
             $book = Book::find($id);
 
-            if(!$book){
+            if (!$book) {
                 return $this->failedResponse(404, ['Book not found'], null);
             }
-            
+
             $book->delete();
 
             return $this->respondInJSON(200, ['success'], $book);
