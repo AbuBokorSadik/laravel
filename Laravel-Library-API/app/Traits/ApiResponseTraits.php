@@ -25,13 +25,31 @@ trait ApiResponseTraits
                 'code' => $code,
                 'messages' => $error_msg,
                 'data' => null
-            ], 422);
+            ], 200);
         }
 
         return response()->json([
             'code' => $code,
             'messages' => $message,
             'data' => $data
-        ], 500);
+        ], 200);
+    }
+
+    protected function failedCredentials(int $code = 411, array $message = [], $data = null)
+    {
+        return response()->json([
+            'code' => $code,
+            'messages' => $message,
+            'data' => null,
+        ], 200);
+    }
+
+    protected function respondToken(int $code = 200, array $message = [], $data = null)
+    {
+        return response()->json([
+            'code' => $code,
+            'messages' => $message,
+            'data' => ['token' => $data],
+        ], 200);
     }
 }
